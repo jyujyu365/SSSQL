@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+  <script>
+  var content = <?= content ?>;
+  var cf = <?= checkf ?>;
+  if (cf == "c3") {
+    let bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
+    let blob = new Blob([ bom, content ], { "type" : "text/csv"});
+    let link = document.createElement("a");
+    link.download = <?= filename ?>;
+    link.href = window.URL.createObjectURL(blob);
+    link.click();
+  }
+  function clicopy() {
+    if (cf == "c4") {
+      let temp = document.createElement("div");
+      let pre = document.createElement("pre");
+      pre.style.webkitUserSelect = "auto";
+      pre.style.userSelect = "auto";
+      temp.appendChild(pre).textContent = content;
+      let s = temp.style;
+      s.position = "fixed";
+      s.right = "200%";
+      document.body.appendChild(temp);
+      document.getSelection().selectAllChildren(temp);
+      document.execCommand("copy");
+      document.body.removeChild(temp);
+    }
+  }
+  </script>
+    <div><?!= msg ?></div>
+    <form action="" onsubmit="return false">
+      <button onclick="clicopy();google.script.host.close();">OK</button>
+    </form>
+  </body>
+</html>
